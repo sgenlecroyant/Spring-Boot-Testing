@@ -53,10 +53,10 @@ public class MemberRestController {
 	@SuppressWarnings("static-access")
 	public ResponseEntity<Member> registerMember(@RequestBody Member member) {
 		Member savedMember = this.memberService.saveNewMember(member);
-		return ResponseEntity.of(Optional.ofNullable(savedMember)).status(HttpStatus.FOUND).build();
+		return ResponseEntity.of(Optional.ofNullable(savedMember)).status(HttpStatus.OK).build();
 	}
 
-	@PutMapping(value = "/members")
+	@PutMapping(value = "/members/{targetMemberId}")
 	public ResponseEntity<Member> updateMember(@PathVariable Integer targetMemberId, @RequestBody Member member) {
 		Member updatedMember = this.memberService.updateMember(targetMemberId, member);
 		return new ResponseEntity<Member>(updatedMember, HttpStatus.OK);

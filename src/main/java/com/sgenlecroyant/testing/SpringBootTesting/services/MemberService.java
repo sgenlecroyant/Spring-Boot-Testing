@@ -55,6 +55,7 @@ public class MemberService implements MemberServiceHelper{
 			oldMember.setFirstName(member.getFirstName());
 			oldMember.setLastName(member.getLastName());
 			oldMember.setUsername(member.getUsername());
+			this.memberRepo.save(oldMember);
 			return oldMember;
 		}else {
 			throw new IllegalStateException(String.format("%d is invalid is", targetMemberId));		}
