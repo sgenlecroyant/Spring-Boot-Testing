@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.sgenlecroyant.testing.SpringBootTesting.models.Member;
 
 public interface MemberServiceHelper {
-	
+	// utility methods
 	public Optional<Member> findMemberByUsername(String username);
 	public Optional<Member> findMemberById(Integer id);
 	public Member saveNewMember(Member member);
