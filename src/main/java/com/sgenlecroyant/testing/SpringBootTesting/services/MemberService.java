@@ -13,12 +13,16 @@ import com.sgenlecroyant.testing.SpringBootTesting.repositories.MemberRepo;
 @Service
 public class MemberService implements MemberServiceHelper{
 	
-	@Autowired
 	private MemberRepo memberRepo;
+	
+	@Autowired
+	public MemberService(MemberRepo memberRepo) {
+		this.memberRepo = memberRepo;
+	}
 	
 	@Override
 	public Optional<Member> findMemberByUsername(String username) {
-		return this.memberRepo.findByUsername(username);
+		return this.memberRepo.findMemberByUsername(username);
 	}
 	@Override
 	public Optional<Member> findMemberById(Integer id) {
@@ -27,7 +31,7 @@ public class MemberService implements MemberServiceHelper{
 
 	@Override
 	public Member saveNewMember(Member member) {
-		Optional<Member> foundMemberByUsername = this.memberRepo.findByUsername(member.getUsername());
+		Optional<Member> foundMemberByUsername = this.memberRepo.findMemberByUsername(member.getUsername());
 		if(foundMemberByUsername.isPresent()) {
 			throw new IllegalArgumentException("duplicated username");
 		}

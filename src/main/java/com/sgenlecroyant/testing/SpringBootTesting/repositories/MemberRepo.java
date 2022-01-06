@@ -10,6 +10,6 @@ import com.sgenlecroyant.testing.SpringBootTesting.models.Member;
 @Repository
 public interface MemberRepo extends JpaRepository<Member, Integer>{
 	
-	public Optional<Member> findByUsername(String username);
+	public Optional<Member> findMemberByUsername(String username);
 
 }
