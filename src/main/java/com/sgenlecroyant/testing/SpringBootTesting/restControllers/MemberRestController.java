@@ -26,8 +26,9 @@ public class MemberRestController {
 	private MemberService memberService;
 
 	@GetMapping(value = "/members", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Member> findAllMembers() {
-		return this.memberService.findAllMembers();
+	public ResponseEntity<List<Member>> findAllMembers() {
+		List<Member> allMembers = this.memberService.findAllMembers();
+		return new ResponseEntity<List<Member>>(allMembers, HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/members/{id}")
