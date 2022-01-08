@@ -33,6 +33,7 @@ public class MemberRestController {
 
 	@GetMapping(value = "/members/{id}")
 	public ResponseEntity<Member> findMemberById(@PathVariable Integer id) throws Exception {
+		
 		Optional<Member> foundMemberById = this.memberService.findMemberById(id);
 
 		return ResponseEntity.ok().body(foundMemberById.orElseThrow(() -> {

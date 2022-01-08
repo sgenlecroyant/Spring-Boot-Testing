@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -67,5 +69,21 @@ class MemberRestControllerTest {
 		assertThat(contentAsString).isEqualTo(membersAsString);
 		
 		System.out.println(contentAsString);
+	}
+	
+	@Test
+	public void test_findMemberById() throws Exception {
+		Member member1 = new Member("Hello", "World", "hello@gmail.com");
+		member1.setId(200);
+		
+		Mockito.when(this.memberService.findMemberById(200)).thenReturn(Optional.ofNullable(member1));
+		
+		MvcResult mvcResult = this.mockMvc.perform(get("/api/v1/members/" +200))
+					.andExpect(status().isOk()).andReturn();
+		MockHttpServletResponse response = mvcResult.getResponse();
+		String contentAsString = response.getContentAsString();
+		
+		assertThat(contentAsString.length()).isGreaterThan(0);
+		System.out.println("content as string: " +contentAsString);
 	}
 }
