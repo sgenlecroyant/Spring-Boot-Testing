@@ -113,4 +113,16 @@ class MemberRestControllerTest {
 		.andReturn();
 		
 	}
+	
+	@Test
+	public void test_deleteMemberById_FAILURE() throws Exception {
+		
+		Mockito.when(this.memberService.deleteMemberById(100))
+		.thenReturn(false);
+		
+		this.mockMvc.perform(delete("/api/v1/members/" +100))
+		.andExpect(status().isNotFound())
+		.andReturn();
+		
+	}
 }
