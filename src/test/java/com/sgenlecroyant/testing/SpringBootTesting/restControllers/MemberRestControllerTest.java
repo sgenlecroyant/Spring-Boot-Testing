@@ -2,6 +2,7 @@ package com.sgenlecroyant.testing.SpringBootTesting.restControllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,5 +100,17 @@ class MemberRestControllerTest {
 						.isInternalServerError()))
 		.isInstanceOf(Exception.class)
 		.hasMessageContaining("not valid");
+	}
+	
+	@Test
+	public void test_deleteMemberById_SUCCESS() throws Exception {
+		
+		Mockito.when(this.memberService.deleteMemberById(100))
+		.thenReturn(true);
+		
+		this.mockMvc.perform(delete("/api/v1/members/" +100))
+		.andExpect(status().isOk())
+		.andReturn();
+		
 	}
 }
