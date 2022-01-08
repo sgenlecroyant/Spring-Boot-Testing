@@ -1,6 +1,7 @@
 package com.sgenlecroyant.testing.SpringBootTesting.restControllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -72,7 +73,7 @@ class MemberRestControllerTest {
 	}
 	
 	@Test
-	public void test_findMemberById() throws Exception {
+	public void test_findMemberById_SUCCESS() throws Exception {
 		Member member1 = new Member("Hello", "World", "hello@gmail.com");
 		member1.setId(200);
 		
@@ -85,5 +86,18 @@ class MemberRestControllerTest {
 		
 		assertThat(contentAsString.length()).isGreaterThan(0);
 		System.out.println("content as string: " +contentAsString);
+	}
+	
+	@Test
+	public void test_findMemberById_FAIL() throws Exception {
+		
+		Mockito.when(this.memberService.findMemberById(200)).thenReturn(Optional.empty());
+		
+		
+		assertThatThrownBy(() -> this.mockMvc.perform(get("/api/v1/members/" +200))
+				.andExpect(status()
+						.isInternalServerError()))
+		.isInstanceOf(Exception.class)
+		.hasMessageContaining("not valid");
 	}
 }
