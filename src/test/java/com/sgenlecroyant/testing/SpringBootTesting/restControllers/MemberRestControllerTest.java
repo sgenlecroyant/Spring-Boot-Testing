@@ -2,8 +2,11 @@ package com.sgenlecroyant.testing.SpringBootTesting.restControllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -16,6 +19,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -122,6 +126,24 @@ class MemberRestControllerTest {
 		
 		this.mockMvc.perform(delete("/api/v1/members/" +100))
 		.andExpect(status().isNotFound())
+		.andReturn();	
+	}
+	
+	@Test
+	public void test_registerMember() throws Exception {
+		
+		Member member1 = new Member("Hello", "World", "hello@gmail.com");
+//		member1.setId(1);
+		
+		Mockito.when(this.memberService.saveNewMember(member1))
+		.thenReturn(member1);
+		
+		String memberAsString = this.objectMapper.writeValueAsString(member1);
+		
+		MvcResult mvcResult = this.mockMvc.perform(post("/api/v1/members")
+				.contentType("application/json")
+				.content(memberAsString))
+				.andExpect(status().isOk())
 		.andReturn();
 		
 	}
