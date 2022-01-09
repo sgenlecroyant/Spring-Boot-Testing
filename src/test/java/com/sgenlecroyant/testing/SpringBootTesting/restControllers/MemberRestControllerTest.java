@@ -7,6 +7,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sgenlecroyant.testing.SpringBootTesting.models.Member;
 import com.sgenlecroyant.testing.SpringBootTesting.repositories.MemberRepo;
@@ -146,5 +148,26 @@ class MemberRestControllerTest {
 				.andExpect(status().isOk())
 		.andReturn();
 		
+	}
+	
+	@Test
+	public void test_updateMember() throws JsonProcessingException, Exception {
+		
+		Member member1 = new Member("Hello", "World", "hello@gmail.com");
+		member1.setId(100);
+		
+//		this.memberService.saveNewMember(member1);
+		
+		Member member2 = new Member("Hello 2", "World 2", "hello@gmail.com2");
+		member1.setId(200);
+		
+		Mockito.when(this.memberService.updateMember(100, member2))
+		.thenReturn(member2);
+		
+		this.mockMvc.perform(put("/api/v1/members/"+100)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(this.objectMapper.writeValueAsString(member2)))
+		.andExpect(status().isOk())
+		.andReturn();
 	}
 }
